@@ -65,6 +65,15 @@ app.put("/products/:id", (req, res) => {
     res.json({message: "Product Updated successfully"});
 });
 
+app.delete("/products/:id", (req, res) => {
+    let data = readData();
+    let id = parseInt(req.params.id);
+    let productIdx = data.products.findIndex((product) => product.id === id);
+    data.products.splice(productIdx, 1);
+    writeData(data);
+    res.json({message: "Product Deleted successfully"});
+});
+
 app.listen(3000, ()=> {
     console.log('Server listening on port 3000.')
 });
