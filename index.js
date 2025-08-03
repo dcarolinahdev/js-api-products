@@ -1,7 +1,10 @@
 import express from 'express';
 import fs from "fs";
+import bodyParser from "body-parser";
 
 const app = express();
+app.use(bodyParser.json());
+
 const readData = () => {
     try {
         const data = fs.readFileSync("./db.json");
@@ -35,6 +38,18 @@ app.get("/products/:id", (req, res) => {
     let id = parseInt(req.params.id);
     let product = data.products.find((product) => product.id === id);
     res.json(product);
+});
+
+app.post("/products/", (req, res) => {
+    let data = readData();
+    let body = req.body;
+    let newProduct = {
+        id: data.products.length + 1,
+        ...body,
+    };
+    data.products.push(newProduct);
+    writeData(data);
+    res.json(newProduct);
 });
 
 app.listen(3000, ()=> {
