@@ -52,6 +52,19 @@ app.post("/products/", (req, res) => {
     res.json(newProduct);
 });
 
+app.put("/products/:id", (req, res) => {
+    let data = readData();
+    let body = req.body;
+    let id = parseInt(req.params.id);
+    let productIdx = data.products.findIndex((product) => product.id === id);
+    data.products[productIdx] = {
+        ...data.products[productIdx],
+        ...body,
+    };
+    writeData(data);
+    res.json({message: "Product Updated successfully"});
+});
+
 app.listen(3000, ()=> {
     console.log('Server listening on port 3000.')
 });
